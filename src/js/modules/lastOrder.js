@@ -1,4 +1,4 @@
-import {dataToStorage} from './services';
+import {dataToStorage, generateNames, generateCity} from './services';
 
 function lastOrderWidget (startCount, productSex, namesF, namesM, cities, itemCountable, maxSaleCount, maxTimeToBuy, minTimeToBuy, minCount, textForBuy){
     
@@ -64,28 +64,6 @@ function lastOrderWidget (startCount, productSex, namesF, namesM, cities, itemCo
             }
         }
     }
-
-    const generateNames = function(sex, male, female){
-        let name = '';
-        switch (sex){
-            case 0:{
-                name = namesF[Math.floor(Math.random() * namesF.length)];
-                break;
-            }
-            case 1:{
-                name = namesM[Math.floor(Math.random() * namesM.length)];
-                break;
-            }
-            case 2:{
-                name = Math.floor(Math.random() * 2)==0?namesF[Math.floor(Math.random() * namesF.length)]:namesM[Math.floor(Math.random() * namesM.length)];
-            }
-        }
-        return name;
-    };
-    const generateCity = function(item){
-        const city = item[Math.floor(Math.random() * item.length)];
-        return city;
-    };
     
 
     const showMessages = function(countToBuy,currentItems){

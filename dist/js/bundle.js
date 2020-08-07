@@ -267,33 +267,11 @@ function lastOrderWidget (startCount, productSex, namesF, namesM, cities, itemCo
             }
         }
     }
-
-    const generateNames = function(sex, male, female){
-        let name = '';
-        switch (sex){
-            case 0:{
-                name = namesF[Math.floor(Math.random() * namesF.length)];
-                break;
-            }
-            case 1:{
-                name = namesM[Math.floor(Math.random() * namesM.length)];
-                break;
-            }
-            case 2:{
-                name = Math.floor(Math.random() * 2)==0?namesF[Math.floor(Math.random() * namesF.length)]:namesM[Math.floor(Math.random() * namesM.length)];
-            }
-        }
-        return name;
-    };
-    const generateCity = function(item){
-        const city = item[Math.floor(Math.random() * item.length)];
-        return city;
-    };
     
 
     const showMessages = function(countToBuy,currentItems){
-        let userName = generateNames(productSex, namesF, namesM);
-        let city = generateCity(cities); 
+        let userName = Object(_services__WEBPACK_IMPORTED_MODULE_0__["generateNames"])(productSex, namesF, namesM);
+        let city = Object(_services__WEBPACK_IMPORTED_MODULE_0__["generateCity"])(cities); 
         let title = '';
         
         title = `${userName} - г. ${city}`;
@@ -505,13 +483,165 @@ __webpack_require__.r(__webpack_exports__);
 	let {startCount, productSex, itemCountable, minCount, maxSaleCount, maxTimeToBuy, minTimeToBuy, timerDeadline} = widgetList.config;
 	let {namesF, namesM, cities, textForOrder, textForBuy} = widgetList.data;
 	
+
+	let count = function(currentItem, buyItem){
+		buyItem = Math.floor(Math.random() * buyItem) +1;
+		let currentCount;
+		if(window.localStorage.getItem('countOfProducts')){
+			currentCount = window.localStorage.getItem('countOfProducts');
+			currentCount = currentCount - buyItem;
+			dataToStorage(currentCount);
+		} else {
+			currentCount = currentItem - buyItem;
+			dataToStorage(currentCount);
+		}
+		return currentCount;
+	};
+
+	let time = function(maxTime, minTime){
+		return Math.floor(Math.random() * maxTime) + minTime;
+	}
+	const interval = time(maxTimeToBuy, minTimeToBuy);	
+
+	// 1
+	function generate(selector, maxTime, minTime){
+		const delay = Math.floor(Math.random() * maxTime) + minTime;
+		let counter = count(startCount, maxSaleCount);
+		console.log(delay, interval);
+		if(counter > minCount ){
+			const timeoutID = setTimeout(showMessages(counter, selector), interval);
+			console.log('1')
+		} else {
+			console.log('2', counter, minCount)
+
+			if(!reinitTimer) {
+				console.log(reinitTimer)
+                reinitTimer = setInterval(reInitConfig, 10000);
+            }
+		}
+		
+	}
+
+	// 2
+	function showMessages(count, selector){
+		selector.querySelector('.widget-itemcounter__num').innerHTML = count;
+		showMessage(selector);
+	}
+
+	// 3
+	function showMessage(selector) {
+        selector.classList.add('received');
+		selector.addEventListener('click', (e) =>{
+			let target = e.target;
+        	if(target && target.classList.contains('widget-notification__close')){
+				closeMessage(selector);
+			}
+		}, { once: true });
+        setTimeout(function(){
+            dismissMessage(selector);
+        }, 4000);
+	}
+	
+	// 4
+	function dismissMessage(selector) {
+		selector.classList.remove('received');
+		generate(selector, maxTimeToBuy, minTimeToBuy);
+	}
+
+	// 5
+
+	
+	let reinitTimer;
+	function reInitConfig(selector){
+        let date = window.localStorage.getItem('date');
+        if(date){
+            if(date < (new Date()).toLocaleDateString()){
+                clearInterval(reinitTimer);
+                generate(selector, maxTimeToBuy, minTimeToBuy);
+            }
+        }
+	}
+	
+	function dataFromStorage(startCount){
+		let date = window.localStorage.getItem('date');
+		if(date){
+			if(date < (new Date()).toLocaleDateString()){
+				dataToStorage(startCount);
+				return startCount;
+			}else{
+				let storageData = window.localStorage.getItem('countOfProducts');
+				if(storageData){
+					return  storageData;
+				}else{
+					return startCount;
+				}
+			}
+		} else {
+			dataToStorage(startCount);
+			return startCount;
+		}
+	}
+	
+	function dataToStorage(items){
+		window.localStorage.setItem('date',(new Date()).toLocaleDateString());
+		window.localStorage.setItem('countOfProducts',items);
+	}
+
+	function closeMessage(selector) {
+        selector.classList.remove('received');
+    }
+
+
+	function frozenWidget (count, parent){
+		const element = document.createElement('div');
+		element.classList.add('widget-frozen', 'slideRight', 'ice1');
+		element.innerHTML = `
+			<div class="widget-frozen__body">
+				<div class="widget-frozen__close"><i class="mdi mdi-close"></i></div>
+				<div class="widget-frozen__title">
+					<span class="text-uppercase">Мы заморозили цену</span> <br>
+					<span class="text-primary h5 font-weight-bold">1$=45руб</span>
+				</div>
+				<div class="widget-frozen__content">
+					Осталось <span class="widget-itemcounter__num text-danger h5 font-weight-bold">${count}</span> штук <br>по старому курсу
+				</div>
+			</div>
+		`;
+		parent.append(element);
+		generate(element, maxTimeToBuy, minTimeToBuy);
+
+		setTimeout(function() {
+			element.classList.add('show');
+		}, 2000);
+	}
+
+	// function generateMessage() {
+    //     const delay = Math.floor(Math.random() * maxTimeToBuy) + minTimeToBuy;
+    //     let currentItems = currentCount;
+    //     let countToBuy = Math.floor(Math.random() * maxSaleCount) +1;
+    //     if(minCount < currentItems - countToBuy){
+    //         const timeoutID = setTimeout(showMessages(countToBuy,currentItems), delay);
+    //     }else{
+
+    //         if(!reinitTimer) {
+
+    //             reinitTimer = setInterval(reInitConfig, 10000);
+    //         }
+    //     }
+    // }
+
+
+
+
+
+
 	if(frozenPrice) {
-		Object(_modules_frozenPrice__WEBPACK_IMPORTED_MODULE_0__["default"])(startCount, body);	
+		frozenWidget(startCount, body);	
 	}
 	if(lastorder){
-		Object(_modules_lastOrder__WEBPACK_IMPORTED_MODULE_2__["default"])(startCount, productSex, namesF, namesM, cities, itemCountable, maxSaleCount, maxTimeToBuy, minTimeToBuy, minCount, textForBuy);
+		//lastOrderWidget(startCount, productSex, namesF, namesM, cities, itemCountable, maxSaleCount, maxTimeToBuy, minTimeToBuy, minCount, textForBuy);
 	}
-	Object(_modules_counter__WEBPACK_IMPORTED_MODULE_1__["default"])('.widget-counter', timerDeadline);
+	//timer('.widget-counter', timerDeadline);
 
 
 }());
