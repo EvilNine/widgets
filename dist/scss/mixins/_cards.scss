@@ -1,0 +1,9 @@
+@mixin card-variant($bg) {
+  
+  background: $bg;
+  background: -moz-linear-gradient(bottom,  rgba($bg,1) 0%, rgba(darken($bg,5%),1) 17%, rgba(darken($bg,10%),0) 100%);
+  background: -webkit-linear-gradient(bottom,  rgba($bg,1) 0%,rgba(darken($bg,5%),1) 17%,rgba(darken($bg,10%),0) 100%);
+  background: linear-gradient(to top,  rgba($bg,1) 0%,rgba(darken($bg,5%),1) 17%,rgba(darken($bg,10%),0) 100%);
+  color: color-yiq($bg);
+  
+}
