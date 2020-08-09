@@ -57,9 +57,7 @@ function lastOrderWidget (startCount, productSex, namesF, namesM, cities, itemCo
         if(minCount < currentItems - countToBuy){
             const timeoutID = setTimeout(showMessages(countToBuy,currentItems), delay);
         }else{
-
             if(!reinitTimer) {
-
                 reinitTimer = setInterval(reInitConfig, 10000);
             }
         }
