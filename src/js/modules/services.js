@@ -100,6 +100,11 @@ function showMessage(item) {
 }
 
 
+const generateCount = function(count){
+    count 
+} 
+
+
 async function getResource(url){
     let res = await fetch(url);
     if(!res.ok){

@@ -97,52 +97,152 @@
 
 
 (function(){
-
-	const widgetList = {
-		frozenPrice: true,
-		lastorder: true,
-		inStock: true,
-		onlineVisitors: true,
-		todayVisitors: true,
-		totalVisitors: true,
-		config: {
-			startCount: 346,
-			productSex: 2,
-			itemCountable: 'шт.',
-			minCount: 10,
-			maxSaleCount: 10,
-			maxTimeToBuy: 10000,
-			minTimeToBuy: 3000,
-			timerDeadline: 1 // days
-		},
-		data: {
-			namesF: ['Александра','Алина','Алла','Анастасия','Ангелина','Анжела','Анжелика','Анна','Антонина','Анфиса','Валентина','Валерия','Варвара','Василиса','Вера','Вероника','Виктория','Галина','Глафира','Дана','Дарья','Евгения','Екатерина','Елена','Елизавета','Жанна','Злата','Зоя','Инга','Инна','Ирина','Карина','Ксения','Лариса','Лидия','Людмила','Маргарита','Марина','Мария','Надежда','Наталья','Нина','Оксана','Ольга','Полина','Прасковья','Раиса','Светлана','Снежана','София','Таисия','Тамара','Татьяна','Юлия','Яна','Ярослава'],
-			namesM: ['Алан','Александр','Алексей','Альберт','Анатолий','Андрей','Антон','Арсен','Арсений','Артем','Артемий','Артур','Богдан','Борис','Вадим','Валентин','Валерий','Василий','Виктор','Виталий','Владимир','Владислав','Всеволод','Вячеслав','Геннадий','Георгий','Герман','Глеб','Гордей','Григорий','Давид','Дамир','Даниил','Демид','Демьян','Денис','Дмитрий','Евгений','Егор','Елисей','Захар','Иван','Игнат','Игорь','Илья','Ильяс','Камиль','Карим','Кирилл','Клим','Константин','Лев','Леонид','Макар','Максим','Марат','Марк','Марсель','Матвей','Мирон','Мирослав','Михаил','Назар','Никита','Николай','Олег','Павел','Петр','Платон','Прохор','Рамиль','Ратмир','Ринат','Роберт','Родион','Роман','Ростислав','Руслан','Рустам','Савва','Савелий','Святослав','Семен','Сергей','Станислав','Степан','Тамерлан','Тимофей','Тимур','Тихон','Федор','Филипп','Шамиль','Эдуард','Эльдар','Эмиль','Эрик','Юрий','Ян','Ярослав'],
-			cities: ['Москва','Санкт-Петербург','Новосибирск','Екатеринбург','Нижний Новгород','Казань','Челябинск','Омск','Самара','Ростов-на-Дону','Уфа','Красноярск','Воронеж','Пермь','Волгоград','Чебоксары','Балашиха','Калининград','Тула','Курск','Севастополь','Сочи','Ставрополь','Улан-Удэ','Тверь','Магнитогорск','Иваново','Брянск','Белгород','Сургут','Владимир','Нижний Тагил','Чита','Архангельск','Симферополь','Калуга','Смоленск','Волжский','Якутск','Саранск','Череповец','Курган','Вологда','Орёл','Владикавказ','Подольск','Грозный','Мурманск','Тамбов','Петрозаводск','Стерлитамак','Нижневартовск','Кострома','Новороссийск','Йошкар-Ола','Химки','Краснодар','Саратов','Тюмень','Тольятти','Ижевск','Барнаул','Ульяновск','Иркутск','Хабаровск','Ярославль','Владивосток','Махачкала','Томск','Оренбург','Кемерово','Новокузнецк','Рязань','Астрахань','Набережные Челны','Пенза','Киров','Липецк','Таганрог','Комсомольск-на-Амуре','Сыктывкар','Нижнекамск','Нальчик','Шахты','Дзержинск','Орск','Братск','Благовещенск','Энгельс','Ангарск','Королёв','Великий Новгород','Старый Оскол','Мытищи','Псков','Люберцы','Южно-Сахалинск','Бийск','Прокопьевск','Армавир','Балаково','Рыбинск','Абакан','Северодвинск','Петропавловск-Камчатский','Норильск','Уссурийск','Волгодонск','Красногорск','Сызрань','Новочеркасск','Каменск-Уральский','Златоуст','Электросталь','Альметьевск','Салават','Миасс','Керчь','Копейск','Находка','Пятигорск','Хасавюрт','Рубцовск','Березники','Коломна','Майкоп','Одинцово','Ковров','Домодедово','Нефтекамск','Кисловодск','Нефтеюганск','Батайск','Новочебоксарск','Серпухов','Щёлково','Дербент','Новомосковск','Черкесск','Первоуральск','Раменское','Назрань','Каспийск','Обнинск','Орехово-Зуево','Кызыл','Новый Уренгой','Невинномысск','Димитровград','Октябрьский','Долгопрудный','Ессентуки','Камышин','Муром','Жуковский','Евпатория','Новошахтинск','Северск','Реутов','Пушкино','Артём','Ноябрьск','Ачинск','Бердск','Арзамас','Елец','Элиста','Ногинск','Сергиев Посад','Новокуйбышевск','Железногорск'],
-			textForBuy: 'Сделан заказ на '	
-		}
-	};
-	
-	let {frozenPrice, lastorder, inStock, onlineVisitors, todayVisitors, totalVisitors} = widgetList;
-	
 	
 	class Widget {
 		constructor(options) {
-			this.startCount = options.startCount;
-			this.productSex = options.productSex;
-			this.itemCountable = options.itemCountable;
-			this.minCount = options.minCount;
-			this.maxSaleCount = options.maxSaleCount;
-			this.maxTimeToBuy = options.maxTimeToBuy;
-			this.minTimeToBuy = options.minTimeToBuy;
-			this.timerDeadline = options.timerDeadline;
+			this.frozenPrice = options.frozenPrice;
+			this.lastorder = options.lastorder;
+			this.inStock = options.inStock;
+			this.onlineVisitors = options.onlineVisitors;
+			this.todayVisitors = options.todayVisitors;
+			this.buyVisitors = options.buyVisitors;
+			this.timeCounter = options.timeCounter;
+
+			this.startCount = options.config.startCount;
+			this.productSex = options.config.productSex;
+			this.itemCountable = options.config.itemCountable;
+			this.minCount = options.config.minCount;
+			this.maxSaleCount = options.config.maxSaleCount;
+			this.maxTimeToBuy = options.config.maxTimeToBuy;
+			this.minTimeToBuy = options.config.minTimeToBuy;
+			this.timerDeadline = options.config.timerDeadline;
+			
+			this.visitorsDelay = options.config.visitorsDelay;
+			this.minVisitors = options.config.minVisitors;
+			this.maxVistors = options.config.maxVistors;
+			this.totalVisitor = options.config.totalVisitor;
+
 			this.delay = 100;
 			this.male = options.data.namesM;
 			this.female = options.data.namesF;
 			this.cities = options.data.cities;
 			this.textForBuy = options.data.textForBuy;
+			
+			
+			
 			this.dataFromStorage();
 			this.count();
+			this.init();
+
+			
+		}
+
+		init(){
+			if( this.frozenPrice ) {
+				this.frozenPriceWidget();
+			}
+			if( this.lastorder ) {
+				this.lastOrderWidget();
+			}
+			if( this.onlineVisitors ) {
+				this.onlineVisitorsWidget();
+			}
+			if( this.todayVisitors ) {
+				this.totalVisitorsWidget();
+			}
+			if( this.buyVisitors ) {
+				this.buyVisitorsWidget();
+			}
+			if( this.inStock ) {
+				this.inStockWidget();
+			}
+			if( this.timeCounter ) {
+				this.timeCounterWidget();
+			}
+		}
+
+		onlineVisitorsWidget(){
+			this.visitorContainer();
+			const element = document.createElement('div');
+			const parent = document.querySelector('.widget-visitors');
+			let count ='';
+			element.classList.add('widget-visitors__item', 'widget-visitors__online');
+			element.innerHTML = `
+				<div class="widget-title">Сейчас на сайте</div>
+				<div class="widget-count">${this.minVisitors}</div>
+			`;
+			parent.append(element);
+			
+			const onlineVisitorsInterval = setInterval(() => {
+				const count = this.random(this.minVisitors,this.maxVistors);
+				element.querySelector('.widget-count').textContent = count;
+			}, this.visitorsDelay);
+			
+		}
+
+		random(min,max) {
+			return Math.floor(Math.random()*(max-min+1)+min);
+		}
+
+		totalVisitorsWidget(){
+			this.visitorContainer();
+			let count;
+			if( window.localStorage.getItem('totalVisitors') ) {
+				count = window.localStorage.getItem('totalVisitors');
+			} else {
+				count = this.totalVisitor;
+				window.localStorage.setItem('totalVisitors', count);
+			}
+			console.log(count);
+
+			const element = document.createElement('div');
+			const parent = document.querySelector('.widget-visitors');
+			element.classList.add('widget-visitors__item', 'widget-visitors__total');
+			element.innerHTML = `
+				<div class="widget-title">Посетителей сегодня</div>
+				<div class="widget-count"></div>
+			`;
+			parent.append(element);
+
+			const totalVisitorsInterval = setInterval(() => {
+				element.querySelector('.widget-count').textContent = count;
+			}, 1000);
+		}
+
+		buyVisitorsWidget(){
+			this.visitorContainer();
+			const element = document.createElement('div');
+			const parent = document.querySelector('.widget-visitors');
+			element.classList.add('widget-visitors__item', 'widget-visitors__today');
+			element.innerHTML = `
+				<div class="widget-title">Купили сегодня</div>
+				<div class="widget-count">3959</div>
+			`;
+			parent.append(element);
+		}
+
+		visitorContainer(){
+			if (!document.querySelector('.widget-visitors')) {
+				const widgetContainer = document.createElement('div');
+				widgetContainer.classList.add('widget-visitors');
+				const body = document.querySelector('body');
+				body.append(widgetContainer);
+				
+			}
+		}
+
+		inStockWidget(){
+			const element = document.querySelectorAll('.widget-itemcounter');
+			element.forEach( (item)=>{
+				let countSelector = item.querySelector('.widget-itemcounter__num');
+				const inStockInterval = setInterval(() => {
+					let count = window.localStorage.getItem('countOfProducts')
+					countSelector.textContent = count;
+					if(count <= this.minCount){	
+						clearInterval(inStockInterval);
+					}
+				}, this.delay);
+			});
 		}
 
 		frozenPriceWidget(){
@@ -217,6 +317,55 @@
 				}
 			}, this.delay);
 		}
+		
+
+		// Timer
+		timeCounterWidget(){
+			function getZero(num){
+				if( num >= 0 && num < 10 ) {
+					return `0${num}`;
+				} else {
+					return num;
+				}
+			}
+			let _t = document.querySelector('.widget-counter'),
+				currentdate = new Date(),
+				_d = currentdate.getDate()+this.timerDeadline,
+				_m = currentdate.getMonth(),
+				_y = currentdate.getFullYear(),
+				daysElement = _t.querySelector('.days'),
+				hoursElement = _t.querySelector('.hours'),
+				minutesElement = _t.querySelector('.minutes'),
+				secondsElement = _t.querySelector('.seconds');
+
+			const second = 1000,
+			minute = second * 60,
+			hour = minute * 60,
+			day = hour * 24;
+		
+			let setDate = new Date(_y,_m,_d,0,0,0).getTime();
+		
+			const timer = setInterval(function(){
+				let curDate = new Date().getTime();
+				let d = setDate - curDate;
+		
+				if(d < 0) {
+					clearInterval(timer);
+					for(let i=0; i<document.querySelectorAll(".number").length; i++) {
+						document.querySelectorAll(".number")[i];
+					}
+				}
+				else {
+					daysElement.innerHTML	 = getZero(Math.floor(	d / day	 ));
+					hoursElement.innerHTML	 = getZero(Math.floor( (d % day) / hour));
+					minutesElement.innerHTML = getZero(Math.floor( (d % hour) / minute));
+					secondsElement.innerHTML = getZero(Math.floor( (d % minute) / second));
+				}
+			}, 1000);
+			
+		}
+
+		
 
 		generateNames(){
 			let name = '';
@@ -281,36 +430,27 @@
 			}	
 		}
 
-
-
 	}
-	const widget = new Widget({
-		startCount: 346,
-		productSex: 2,
-		itemCountable: 'шт.',
-		minCount: 10,
-		maxSaleCount: 10,
-		maxTimeToBuy: 10000,
-		minTimeToBuy: 3000,
-		timerDeadline: 1,
-		data: {
-			namesF: ['Александра','Алина','Алла','Анастасия','Ангелина','Анжела','Анжелика','Анна','Антонина','Анфиса','Валентина','Валерия','Варвара','Василиса','Вера','Вероника','Виктория','Галина','Глафира','Дана','Дарья','Евгения','Екатерина','Елена','Елизавета','Жанна','Злата','Зоя','Инга','Инна','Ирина','Карина','Ксения','Лариса','Лидия','Людмила','Маргарита','Марина','Мария','Надежда','Наталья','Нина','Оксана','Ольга','Полина','Прасковья','Раиса','Светлана','Снежана','София','Таисия','Тамара','Татьяна','Юлия','Яна','Ярослава'],
-			namesM: ['Алан','Александр','Алексей','Альберт','Анатолий','Андрей','Антон','Арсен','Арсений','Артем','Артемий','Артур','Богдан','Борис','Вадим','Валентин','Валерий','Василий','Виктор','Виталий','Владимир','Владислав','Всеволод','Вячеслав','Геннадий','Георгий','Герман','Глеб','Гордей','Григорий','Давид','Дамир','Даниил','Демид','Демьян','Денис','Дмитрий','Евгений','Егор','Елисей','Захар','Иван','Игнат','Игорь','Илья','Ильяс','Камиль','Карим','Кирилл','Клим','Константин','Лев','Леонид','Макар','Максим','Марат','Марк','Марсель','Матвей','Мирон','Мирослав','Михаил','Назар','Никита','Николай','Олег','Павел','Петр','Платон','Прохор','Рамиль','Ратмир','Ринат','Роберт','Родион','Роман','Ростислав','Руслан','Рустам','Савва','Савелий','Святослав','Семен','Сергей','Станислав','Степан','Тамерлан','Тимофей','Тимур','Тихон','Федор','Филипп','Шамиль','Эдуард','Эльдар','Эмиль','Эрик','Юрий','Ян','Ярослав'],
-			cities: ['Москва','Санкт-Петербург','Новосибирск','Екатеринбург','Нижний Новгород','Казань','Челябинск','Омск','Самара','Ростов-на-Дону','Уфа','Красноярск','Воронеж','Пермь','Волгоград','Чебоксары','Балашиха','Калининград','Тула','Курск','Севастополь','Сочи','Ставрополь','Улан-Удэ','Тверь','Магнитогорск','Иваново','Брянск','Белгород','Сургут','Владимир','Нижний Тагил','Чита','Архангельск','Симферополь','Калуга','Смоленск','Волжский','Якутск','Саранск','Череповец','Курган','Вологда','Орёл','Владикавказ','Подольск','Грозный','Мурманск','Тамбов','Петрозаводск','Стерлитамак','Нижневартовск','Кострома','Новороссийск','Йошкар-Ола','Химки','Краснодар','Саратов','Тюмень','Тольятти','Ижевск','Барнаул','Ульяновск','Иркутск','Хабаровск','Ярославль','Владивосток','Махачкала','Томск','Оренбург','Кемерово','Новокузнецк','Рязань','Астрахань','Набережные Челны','Пенза','Киров','Липецк','Таганрог','Комсомольск-на-Амуре','Сыктывкар','Нижнекамск','Нальчик','Шахты','Дзержинск','Орск','Братск','Благовещенск','Энгельс','Ангарск','Королёв','Великий Новгород','Старый Оскол','Мытищи','Псков','Люберцы','Южно-Сахалинск','Бийск','Прокопьевск','Армавир','Балаково','Рыбинск','Абакан','Северодвинск','Петропавловск-Камчатский','Норильск','Уссурийск','Волгодонск','Красногорск','Сызрань','Новочеркасск','Каменск-Уральский','Златоуст','Электросталь','Альметьевск','Салават','Миасс','Керчь','Копейск','Находка','Пятигорск','Хасавюрт','Рубцовск','Березники','Коломна','Майкоп','Одинцово','Ковров','Домодедово','Нефтекамск','Кисловодск','Нефтеюганск','Батайск','Новочебоксарск','Серпухов','Щёлково','Дербент','Новомосковск','Черкесск','Первоуральск','Раменское','Назрань','Каспийск','Обнинск','Орехово-Зуево','Кызыл','Новый Уренгой','Невинномысск','Димитровград','Октябрьский','Долгопрудный','Ессентуки','Камышин','Муром','Жуковский','Евпатория','Новошахтинск','Северск','Реутов','Пушкино','Артём','Ноябрьск','Ачинск','Бердск','Арзамас','Елец','Элиста','Ногинск','Сергиев Посад','Новокуйбышевск','Железногорск'],
-			textForBuy: 'Сделан заказ на '	
+
+	async function getResource(url){
+		try {
+			let res = await fetch(url);
+			if(!res.ok){
+				throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+			}
+			return await res.json();
+		} catch (err) {
+			console.log(err);
 		}
-	});
-	if(frozenPrice) {
-		widget.frozenPriceWidget();
+		
 	}
-	if(lastorder){
-		widget.lastOrderWidget();
-	}
+	
+	getResource(`/widgetList.json`)
+        .then(data => {
+			const widget = new Widget(data);
+        });
 
-
-
-
-
+	
 }());
 
 /***/ })
