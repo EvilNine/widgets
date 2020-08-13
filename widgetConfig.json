@@ -1,0 +1,13 @@
+{
+    "startCount": 346,
+    "productSex": 2,
+    "itemCountable": "шт.",
+    "minCount": 10,
+    "maxSaleCount": 1,
+    "maxTimeToBuy": 10000,
+    "minTimeToBuy": 3000,
+    "timerDeadline": 1,
+    "visitorsDelay": 10000,
+    "onlineVisitors": 100,
+    "totalVisitors": 1000
+}

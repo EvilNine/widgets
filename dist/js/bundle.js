@@ -108,25 +108,27 @@
 			this.buyVisitors = options.buyVisitors;
 			this.timeCounter = options.timeCounter;
 
-			this.startCount = options.config.startCount;
-			this.productSex = options.config.productSex;
-			this.itemCountable = options.config.itemCountable;
-			this.minCount = options.config.minCount;
-			this.maxSaleCount = options.config.maxSaleCount;
-			this.maxTimeToBuy = options.config.maxTimeToBuy;
-			this.minTimeToBuy = options.config.minTimeToBuy;
-			this.timerDeadline = options.config.timerDeadline;
+			this.startCount = options.startCount;
+			this.productSex = options.productSex;
+			this.itemCountable = options.itemCountable;
+			this.minCount = options.minCount;
+			this.maxSaleCount = options.maxSaleCount;
+			this.maxTimeToBuy = options.maxTimeToBuy;
+			this.minTimeToBuy = options.minTimeToBuy;
+			this.timerDeadline = options.timerDeadline;
 			
-			this.visitorsDelay = options.config.visitorsDelay;
-			this.minVisitors = options.config.minVisitors;
-			this.maxVistors = options.config.maxVistors;
-			this.totalVisitor = options.config.totalVisitor;
+			this.totalVisitors = options.totalVisitors;
 
-			this.delay = 100;
-			this.male = options.data.namesM;
-			this.female = options.data.namesF;
-			this.cities = options.data.cities;
-			this.textForBuy = options.data.textForBuy;
+			this.visitorsDelay = options.visitorsDelay;
+			this.onlineVisitors = options.onlineVisitors;
+			
+			
+
+			this.delay = 10000;
+			this.male = options.namesM;
+			this.female = options.namesF;
+			this.cities = options.cities;
+			this.textForBuy = options.textForBuy;
 			
 			
 			
@@ -165,19 +167,40 @@
 			this.visitorContainer();
 			const element = document.createElement('div');
 			const parent = document.querySelector('.widget-visitors');
-			let count ='';
+			
 			element.classList.add('widget-visitors__item', 'widget-visitors__online');
 			element.innerHTML = `
 				<div class="widget-title">Сейчас на сайте</div>
-				<div class="widget-count">${this.minVisitors}</div>
+				<div class="widget-count">${this.getCount(this.onlineVisitors, 'onlineVisitors')}</div>
 			`;
 			parent.append(element);
 			
 			const onlineVisitorsInterval = setInterval(() => {
-				const count = this.random(this.minVisitors,this.maxVistors);
-				element.querySelector('.widget-count').textContent = count;
+				let count = this.getCount(this.onlineVisitors, 'onlineVisitors');
+				element.querySelector('.widget-count').textContent = ++count;
 			}, this.visitorsDelay);
-			
+		}
+
+		getCount(item, localStorage){
+			const hour = new Date().getHours();
+			if( hour >= 0 && hour < 8 ) {
+				let max = Math.round(item * .333);
+				let min = Math.round(item * .1);
+				item =  Math.floor(Math.random()*(max-min+1)+min);
+			} else if (hour >= 8 && hour < 16) {
+				let max = Math.round(item * .6);
+				let min = Math.round(item * .3);
+				item =  Math.floor(Math.random()*(max-min+1)+min);
+			} else {
+				let max = item;
+				let min = Math.round(item * .666);
+				item =  Math.floor(Math.random()*(max-min+1)+min);
+			}
+			window.localStorage.setItem(localStorage, item);	
+			return item;
+		}
+		between(x, min, max) {
+			return x >= min && x < max;
 		}
 
 		random(min,max) {
@@ -186,27 +209,24 @@
 
 		totalVisitorsWidget(){
 			this.visitorContainer();
-			let count;
-			if( window.localStorage.getItem('totalVisitors') ) {
-				count = window.localStorage.getItem('totalVisitors');
-			} else {
-				count = this.totalVisitor;
-				window.localStorage.setItem('totalVisitors', count);
-			}
-			console.log(count);
-
+			
+			// window.localStorage.setItem('onlineVisitors', item);	
+			let count = this.getCount(this.totalVisitors, 'totalVisitors');
 			const element = document.createElement('div');
 			const parent = document.querySelector('.widget-visitors');
 			element.classList.add('widget-visitors__item', 'widget-visitors__total');
 			element.innerHTML = `
 				<div class="widget-title">Посетителей сегодня</div>
-				<div class="widget-count"></div>
+				<div class="widget-count">${count}</div>
 			`;
 			parent.append(element);
 
+
 			const totalVisitorsInterval = setInterval(() => {
+				count = ++count;
 				element.querySelector('.widget-count').textContent = count;
-			}, 1000);
+				window.localStorage.setItem('totalVisitors', count);
+			}, this.delay);
 		}
 
 		buyVisitorsWidget(){
@@ -226,8 +246,7 @@
 				const widgetContainer = document.createElement('div');
 				widgetContainer.classList.add('widget-visitors');
 				const body = document.querySelector('body');
-				body.append(widgetContainer);
-				
+				body.append(widgetContainer);	
 			}
 		}
 
@@ -235,8 +254,9 @@
 			const element = document.querySelectorAll('.widget-itemcounter');
 			element.forEach( (item)=>{
 				let countSelector = item.querySelector('.widget-itemcounter__num');
+				countSelector.textContent = window.localStorage.getItem('countOfProducts');
 				const inStockInterval = setInterval(() => {
-					let count = window.localStorage.getItem('countOfProducts')
+					let count = window.localStorage.getItem('countOfProducts');
 					countSelector.textContent = count;
 					if(count <= this.minCount){	
 						clearInterval(inStockInterval);
@@ -260,8 +280,11 @@
 					</div>
 				</div>
 			`;
-			element.classList.add('show');
 			this.showPriceWidget(element);
+			setTimeout( ()=> {
+				element.classList.add('show');
+			}, this.delay);
+			
 			
 			const frozenInterval = setInterval(() => {
 				let count = window.localStorage.getItem('countOfProducts')
@@ -302,14 +325,18 @@
 					<button class="widget-notification__close"><span class="mdi mdi-close"></span></button>
 				</div>
 			`;
-			element.classList.add('received');
+			setTimeout( ()=> {
+				element.classList.add('received');
+			}, this.delay);
 			body.append(element);
 			
 			const orderInterval = setInterval(() => {
-				let count = window.localStorage.getItem('countOfProducts'),
-					title = `${this.generateCity()} - ${this.generateNames()}`,
-					content = `${this.textForBuy} ${count} ${this.itemCountable}`;
 				
+				let count =  window.localStorage.getItem('countOfProducts'),
+					countBuy = window.localStorage.getItem('countToBuy'),
+					title = `${this.generateCity()} - ${this.generateNames()}`,
+					content = `${this.textForBuy} ${countBuy} ${this.itemCountable}`;
+				console.log(count);
 				element.querySelector('.widget-notification__title').textContent = title;
 				element.querySelector('.widget-notification__content').textContent = content;
 				if(count <= this.minCount){	
@@ -397,6 +424,7 @@
 				
 				if(currentItems > this.minCount){
 					this.dataToStorage(newCount);
+					window.localStorage.setItem('countToBuy', countToBuy);
 				} else {
 					clearInterval(countInterval);
 					this.dataToStorage(currentItems);
@@ -432,23 +460,27 @@
 
 	}
 
-	async function getResource(url){
-		try {
-			let res = await fetch(url);
-			if(!res.ok){
-				throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-			}
-			return await res.json();
-		} catch (err) {
-			console.log(err);
-		}
-		
-	}
+	const fetchAll = files => new Promise((resolve, reject) =>
+        Promise.all(Object.values(files).map(file => fetch(file)))
+               .then(responses =>
+                      Promise.all(responses.map(r => r.json()))
+                             .then(jsons =>
+                                 resolve(Object.keys(files).reduce((prev, curr, index) =>
+                                     !(prev[curr] = jsons[index]) || prev, {}))
+                             ))
+               .catch(err => reject(err))
+	);
 	
-	getResource(`/widgetList.json`)
-        .then(data => {
-			const widget = new Widget(data);
-        });
+	const getData = async () => {
+        const {list, config, data} = await fetchAll({
+            list: '/widgetList.json',
+			config: '/widgetConfig.json',
+			data: '/widgetData.json'
+		});
+		const allData = Object.assign( {}, list, config, data );
+		const widget = new Widget(allData);        
+    };
+    getData();
 
 	
 }());
