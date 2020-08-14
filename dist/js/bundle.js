@@ -117,11 +117,18 @@
 			this.minTimeToBuy = options.minTimeToBuy;
 			this.timerDeadline = options.timerDeadline;
 			
-			this.totalVisitors = options.totalVisitors;
+			
 
 			this.visitorsDelay = options.visitorsDelay;
-			this.onlineVisitors = options.onlineVisitors;
+
+			this.totalVisitors = options.totalVisitors;
+			this.totalVisitorsText = options.totalVisitorsText;
 			
+			this.onlineVisitors = options.onlineVisitors;
+			this.onlineVisitorsText = options.onlineVisitorsText;
+
+			this.buyVisitors = options.buyVisitors;
+			this.buyVisitorsText = options.buyVisitorsText;
 			
 
 			this.delay = 10000;
@@ -170,7 +177,7 @@
 			
 			element.classList.add('widget-visitors__item', 'widget-visitors__online');
 			element.innerHTML = `
-				<div class="widget-title">Сейчас на сайте</div>
+				<div class="widget-title">${this.onlineVisitorsText}</div>
 				<div class="widget-count">${this.getCount(this.onlineVisitors, 'onlineVisitors')}</div>
 			`;
 			parent.append(element);
@@ -216,7 +223,7 @@
 			const parent = document.querySelector('.widget-visitors');
 			element.classList.add('widget-visitors__item', 'widget-visitors__total');
 			element.innerHTML = `
-				<div class="widget-title">Посетителей сегодня</div>
+				<div class="widget-title">${this.totalVisitorsText}</div>
 				<div class="widget-count">${count}</div>
 			`;
 			parent.append(element);
@@ -231,22 +238,32 @@
 
 		buyVisitorsWidget(){
 			this.visitorContainer();
+			let count = this.getCount(this.buyVisitors, 'buyVisitors');
 			const element = document.createElement('div');
 			const parent = document.querySelector('.widget-visitors');
 			element.classList.add('widget-visitors__item', 'widget-visitors__today');
 			element.innerHTML = `
-				<div class="widget-title">Купили сегодня</div>
-				<div class="widget-count">3959</div>
+				<div class="widget-title">${this.buyVisitorsText}</div>
+				<div class="widget-count">${count}</div>
 			`;
 			parent.append(element);
+
+			const buyVisitorsInterval = setInterval(() => {
+				count = ++count;
+				element.querySelector('.widget-count').textContent = count;
+				window.localStorage.setItem('buyVisitors', count);
+			}, this.delay);
 		}
 
 		visitorContainer(){
 			if (!document.querySelector('.widget-visitors')) {
 				const widgetContainer = document.createElement('div');
 				widgetContainer.classList.add('widget-visitors');
+				// widgetContainer.innerHTML = `
+				// 	<div class="widget-visitors__close"><span></span></div>
+				// `;
 				const body = document.querySelector('body');
-				body.append(widgetContainer);	
+				body.append(widgetContainer);
 			}
 		}
 
